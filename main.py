@@ -49,8 +49,15 @@ def predict(data: dict):
     return {"prediction": result}
 
 import os
-import uvicorn
+import requests
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    uvicorn.run("main:app", host="0.0.0.0", port=port)
+MODEL_URL = "https://huggingface.co/gokul3177/redshift-model/resolve/main/redshift_model.json"
+SCALER_URL = "https://huggingface.co/gokul3177/redshift-model/resolve/main/scaler.pkl"
+
+if not os.path.exists("redshift_model.json"):
+    r = requests.get(MODEL_URL)
+    open("redshift_model.json", "wb").write(r.content)
+
+if not os.path.exists("scaler.pkl"):
+    r = requests.get(SCALER_URL)
+    open("scaler.pkl", "wb").write(r.content)
